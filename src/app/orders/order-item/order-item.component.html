@@ -1,0 +1,45 @@
+<h4 class="mb-4">Place Your Order</h4>
+<form #form='ngForm' auto-complete='off' (submit) = 'submitOrderItem(form)'>
+    <input type="hidden" name="OrderItemID" #OrderItemID="ngModel" [(ngModel)]='orderItemData.OrderItemID'>
+    <input type="hidden" name="OrderID" #OrderID="ngModel" [(ngModel)]='orderItemData.OrderID'>
+    <input type="hidden" name="ItemName" #ItemName="ngModel" [(ngModel)]='orderItemData.ItemName'>
+    <div class="form-group">
+        <label>Menu Item</label>
+<select name="ItemID" #ItemID="ngModel" [(ngModel)]='orderItemData.ItemID' class="form-control" 
+(change)='updatePrice($event.target)' [class.is-invalid]='!isValid && orderItemData.ItemID==0'>  
+    <option value=''>-Select Menu-</option>
+    <option *ngFor='let item of itemList' value="{{item.ItemID}}">{{item.ItemName}}</option>
+</select>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="Price">Price</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><s>N</s></div>
+                </div>
+                <input name='Price' #Price="ngModel" [(ngModel)]='orderItemData.Price'
+                class='form-control'  readonly>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Quantity">Quantity</label>
+                <input name='Quantity' type= "number" min = '0' #Quantity="ngModel" [(ngModel)]='orderItemData.Quantity'
+                class='form-control' (input) = 'updateTotal()' [class.is-invalid]='!isValid && orderItemData.Quantity==0'>
+            </div>
+    </div> 
+    <div class="form-group">
+        <label for="Total">Total</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><s>N</s></div>
+            </div>
+            <input name='Total' #Total="ngModel" [(ngModel)]='orderItemData.Total'
+            class='form-control'  readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-dark btn-lg mr-2"><i class="fa fa-database"></i> Submit Order</button>
+        <button type="button" class="btn btn-outline-dark btn-lg" [mat-dialog-close]><i class="fa fa-close"></i> Close</button>
+    </div>
+</form>

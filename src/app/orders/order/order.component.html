@@ -1,0 +1,73 @@
+<form #form="ngForm" auto-complete='off' *ngIf='orderService.formData' (submit) = 'submitOrder(form)'>
+    <input type='hidden' name='OrderID' #orderID="ngModel" [(ngModel)]='orderService.formData.OrderID'>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">#</div>
+                    </div>
+                    <input name='OrderNo' #orderNo="ngModel" [(ngModel)]='orderService.formData.OrderNo'
+                    class='form-control' placeholder="Order No" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <select name='CustomerID' #CustomerID="ngModel" [(ngModel)]='orderService.formData.CustomerID'
+                    class='form-control' [class.is-invalid]="!isValid && orderService.formData.CustomerID==0">
+                    <option value='0'>-Select Customer-</option>
+                    <option *ngFor="let customer of customers" value="{{customer.CustomerID}}">{{customer.CustomerName}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select name='PaymentMethod' #PaymentMethod="ngModel" [(ngModel)]='orderService.formData.PaymentMethod'
+                    class='form-control' placeholder="Payment Method">
+                    <option value=''>-Select Payment Method-</option>
+                    <option value='cash'>Cash</option>
+                    <option value='card'>Card</option>
+                </select>
+            </div>
+ 
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">NGN</div>
+                    </div>
+                    <input name='GrandTotal' #GrandTotal="ngModel" [(ngModel)]='orderService.formData.GrandTotal'
+                    class='form-control' placeholder="GrandTotal" readonly>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark btn-sm" style="margin-left:30px;"><i class="fa fa-database"></i> Place Order</button>
+            <button type="button" class="btn btn-outline-dark btn-sm ml-2" style="margin-right:40px;" routerLink ='/orders'><i class="fa fa-table"></i> View Orders</button>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-borderless table-hover table-striped">
+                <thead class="thead-light">
+                    <th>Menu</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>
+                        <a class="btn btn-sm btn-success text-white" (click)='addEditOrderItem(null, orderService.formData.OrderID)'> <i class="fa fa-plus"></i>Add Item</a>
+                    </th>
+                </thead>
+                <tbody> 
+                    <tr *ngIf='orderService.orderItems.length == 0' [class.text-danger]='!isValid && orderService.orderItems.length==0' >
+                        <td class="font-italic text-center" colspan='5'>
+                            No menu item selected for this order
+                        </td>
+                    </tr>
+                    <tr *ngFor= 'let item of orderService.orderItems; let i = index;'>
+                        <td>{{item.ItemName}}</td>
+                        <td>{{item.Price}}</td>
+                        <td class="text-center">{{item.Quantity}}</td>
+                        <td>{{item.Total}}</td>
+                        <td>
+                            <a class="btn btn-sm btn-info text-white" (click)='addEditOrderItem(i, orderService.formData.OrderID)'> <i class="fa fa-pencil"></i></a>
+                            <a class="btn btn-sm btn-danger text-white ml-2" (click)='deleteOrderItem(item.OrderItemID, i)'> <i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>       
+    </div>
+</form>
